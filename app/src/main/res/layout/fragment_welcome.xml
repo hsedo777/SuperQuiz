@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:paddingVertical="20dp"
+	android:paddingHorizontal="15dp"
+	android:background="@color/default_bg"
+	android:gravity="center_horizontal"
 	tools:context=".WelcomeFragment">
 
-	<!-- TODO: Update blank fragment layout -->
 	<TextView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:text="@string/hello_blank_fragment" />
+		android:layout_height="wrap_content"
+		android:text="@string/welcome_msg"
+		android:paddingHorizontal="20dp"
+		android:paddingVertical="12dp"
+		android:layout_marginVertical="24dp"
+		android:background="@color/white"
+		android:textColor="@color/default_tx"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:id="@+id/welcome_msg_text_view"/>
 
-</FrameLayout>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/ask_name_text_view"
+		android:layout_marginVertical="24dp"
+		android:textColor="@color/default_tx"
+		android:textSize="25sp"
+		android:gravity="center"
+		android:text="@string/ask_name"/>
+
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginVertical="16dp"
+		android:hint="@string/ask_name_edit_hint"
+		android:gravity="center"
+		android:minHeight="48dp"
+		android:maxLines="3" />
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/start_game_button"
+		android:layout_margin="24dp"
+		android:textSize="16sp" />
+
+</LinearLayout>
