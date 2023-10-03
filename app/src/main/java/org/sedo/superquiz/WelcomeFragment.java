@@ -1,16 +1,20 @@
 package org.sedo.superquiz;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import org.sedo.superquiz.databinding.FragmentWelcomeBinding;
 
@@ -91,6 +95,21 @@ public class WelcomeFragment extends Fragment {
 			}
 		});
 
-		binding.playGame.setOnClickListener(v -> {});
+		binding.playGame.setOnClickListener(v -> {
+			//Hide the keyboard if active
+			InputMethodManager input = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			if (getActivity().getCurrentFocus() != null){
+				input.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			}
+
+			// Split to next fragment and keep backTo disallowed
+			FragmentManager manager = getParentFragmentManager();
+			FragmentTransaction transaction = manager.beginTransaction();
+			QuizFragment quiz = QuizFragment.newInstance();
+			transaction.add(R.id.fragment_container_view, quiz);
+			/*transaction.addToBackStack(null);
+			transaction.setReorderingAllowed(true);*/
+			transaction.commit();
+		});
 	}
 }
