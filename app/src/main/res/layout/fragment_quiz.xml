@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:id="@+id/quiz_root_container"
+	android:background="@color/default_bg"
+	android:paddingVertical="15dp"
+	android:paddingHorizontal="15dp"
+	android:gravity="center_horizontal"
+	tools:context=".QuizFragment">
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="2"
+		android:id="@+id/quiz_qst_view"
+		android:background="@color/white"
+		android:textColor="@color/default_tx"
+		android:padding="10dp"
+		android:gravity="center"
+		android:textSize="23sp"
+		tools:text="Question ?" />
+
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:id="@+id/answer_a"
+		tools:text="Answer A"
+		android:layout_marginTop="32dp"
+		android:layout_marginHorizontal="8dp"/>
+
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:id="@+id/answer_b"
+		tools:text="Answer B"
+		android:layout_marginTop="8dp"
+		android:layout_marginHorizontal="8dp"/>
+
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:id="@+id/answer_c"
+		tools:text="Answer C"
+		android:layout_marginTop="8dp"
+		android:layout_marginHorizontal="8dp"/>
+
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:id="@+id/answer_d"
+		tools:text="Answer D"
+		android:layout_marginTop="8dp"
+		android:layout_marginHorizontal="8dp"/>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:id="@+id/quiz_res_panel"
+		android:layout_marginTop="32dp"
+		android:padding="4dp"
+		android:visibility="gone">
+
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintHorizontal_weight="1"
+			android:id="@+id/quiz_pop_up_view"
+			tools:text="@string/hello_blank_fragment"
+			android:gravity="center"
+			android:textStyle="italic"
+			app:layout_constraintStart_toStartOf="@id/quiz_res_panel"
+			app:layout_constraintBaseline_toBaselineOf="@+id/quiz_next_button" />
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:id="@+id/quiz_next_button"
+			android:text="@string/next"
+			app:layout_constraintHorizontal_weight="1"
+			app:layout_constraintEnd_toEndOf="@id/quiz_res_panel"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
