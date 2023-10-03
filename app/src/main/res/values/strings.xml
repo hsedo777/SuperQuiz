@@ -4,5 +4,7 @@
 	<string name="ask_name">What\'s your name ?</string>
 	<string name="ask_name_edit_hint">Please, type your name</string>
 	<string name="start_game_button">Let\'s play!</string>
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="next">Next</string>
 
 </resources>
