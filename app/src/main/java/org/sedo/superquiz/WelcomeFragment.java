@@ -2,11 +2,17 @@ package org.sedo.superquiz;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.sedo.superquiz.databinding.FragmentWelcomeBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +25,8 @@ public class WelcomeFragment extends Fragment {
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
+
+	private FragmentWelcomeBinding binding;
 
 	// TODO: Rename and change types of parameters
 	private String mParam1;
@@ -59,6 +67,30 @@ public class WelcomeFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_welcome, container, false);
+		binding = FragmentWelcomeBinding.inflate(inflater, container, false);
+		return binding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		//Deactivate the button until the text field become not empty
+		binding.playGame.setEnabled(false);
+		binding.askNameEditView.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				binding.playGame.setEnabled(!s.toString().trim().isEmpty());
+			}
+		});
+
+		binding.playGame.setOnClickListener(v -> {});
 	}
 }
