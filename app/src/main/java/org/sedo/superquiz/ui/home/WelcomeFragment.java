@@ -1,4 +1,4 @@
-package org.sedo.superquiz;
+package org.sedo.superquiz.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import org.sedo.superquiz.R;
 import org.sedo.superquiz.databinding.FragmentWelcomeBinding;
+import org.sedo.superquiz.ui.quiz.QuizFragment;
 
 /**
  * A simple {@link Fragment} subclass.

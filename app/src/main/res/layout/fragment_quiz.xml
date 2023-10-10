@@ -10,7 +10,7 @@
 	android:paddingVertical="15dp"
 	android:paddingHorizontal="15dp"
 	android:gravity="center_horizontal"
-	tools:context=".QuizFragment">
+	tools:context=".ui.quiz.QuizFragment">
 
 	<TextView
 		android:layout_width="match_parent"
