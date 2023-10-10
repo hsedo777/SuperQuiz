@@ -49,6 +49,10 @@ public class QuizFragment extends Fragment {
 
 	private void onResponseTap(View view){
 		binding.quizResPanel.setVisibility(ViewGroup.VISIBLE);
+		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
+		for (Button button : buttons){
+			button.setEnabled(false);
+		}
 	}
 
 	@Override
