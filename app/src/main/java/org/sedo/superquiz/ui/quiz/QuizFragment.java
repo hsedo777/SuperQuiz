@@ -1,4 +1,4 @@
-package org.sedo.superquiz;
+package org.sedo.superquiz.ui.quiz;
 
 import android.os.Bundle;
 
