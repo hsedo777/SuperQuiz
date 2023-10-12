@@ -14,6 +14,13 @@ public class QuizViewModel extends ViewModel {
 	}
 
 	/**
+	 * Gets the {@code LiveData} of the current question.
+	 * */
+	public MutableLiveData<QuizState> getCurrentQuestion(){
+		return currentQuestion;
+	}
+
+	/**
 	 * Calls on first come to the fragment to start th quiz.
 	 */
 	public void startQuiz() {
@@ -33,7 +40,7 @@ public class QuizViewModel extends ViewModel {
 		boolean check = responseIndex == state.getQuestion().getAnswerIndex();
 		if (check) {
 			state.setScore(state.getScore() + 10);
-			currentQuestion.postValue(state);
+			currentQuestion.postValue(state.clone());
 		}
 		return check;
 	}
@@ -51,7 +58,7 @@ public class QuizViewModel extends ViewModel {
 			return false;
 		} else {
 			state.setQuestionIndex(state.getQuestionIndex() + 1);
-			currentQuestion.postValue(state);
+			currentQuestion.postValue(state.clone());
 			return true;
 		}
 	}

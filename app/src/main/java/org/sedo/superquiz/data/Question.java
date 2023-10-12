@@ -15,6 +15,10 @@ public class Question {
 		return choices;
 	}
 
+	public String getChoice(int index){
+		return choices.get(index);
+	}
+
 	public int getAnswerIndex() {
 		return answerIndex;
 	}
