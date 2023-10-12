@@ -76,7 +76,8 @@
 			android:id="@+id/quiz_pop_up_view"
 			tools:text="@string/hello_blank_fragment"
 			android:gravity="center"
-			android:textStyle="italic"
+			android:textStyle="italic|bold"
+			android:textSize="24sp"
 			app:layout_constraintStart_toStartOf="@id/quiz_res_panel"
 			app:layout_constraintBaseline_toBaselineOf="@+id/quiz_next_button" />
 
