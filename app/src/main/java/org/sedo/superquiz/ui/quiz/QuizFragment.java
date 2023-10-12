@@ -1,7 +1,6 @@
 package org.sedo.superquiz.ui.quiz;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStore;
 
 import org.sedo.superquiz.R;
 import org.sedo.superquiz.data.Question;
@@ -62,42 +59,22 @@ public class QuizFragment extends Fragment {
 	private void onResponseTap(View view) {
 		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
 		int i = 0;
-		@StringRes int answerText = 0;
+		QuizState quizState = model.getCurrentQuestion().getValue();
 		for (Button button : buttons) {
 			button.setEnabled(false);
 			if (button == view) {
-				@ColorRes final int color;
-				if (model.onResponseTap(i)) {
-					// In case of good answer
-					color = R.color.answer_good;
-					answerText = R.string.answer_good;
-				} else {
-					color = R.color.answer_bad;
-					answerText = R.string.answer_bad;
-				}
-				button.setBackgroundColor(getResources().getColor(color, null));
+				model.onResponseTap(i);
+				updateOnTap(button, i, quizState);
 			}
 			i++;
 		}
-		binding.quizPopUpView.setText(answerText);
-		// Forces announcing result for accessibility tools
-		view.announceForAccessibility(getText(answerText));
-		if (model.getCurrentQuestion().getValue().isLast()) {
-			binding.quizNextButton.setText(R.string.finish);
-		}
-		binding.quizResPanel.setVisibility(ViewGroup.VISIBLE);
 	}
 
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		model.startQuiz();
-		model.getCurrentQuestion().observe(getViewLifecycleOwner(), new Observer<QuizState>() {
-			@Override
-			public void onChanged(QuizState quizState) {
-				loadState(quizState);
-			}
-		});
+		model.getCurrentQuestion().observe(getViewLifecycleOwner(), quizState -> loadState(quizState));
 		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
 		for (Button button : buttons) {
 			button.setOnClickListener(this::onResponseTap);
@@ -107,9 +84,46 @@ public class QuizFragment extends Fragment {
 	private void loadState(QuizState state) {
 		Question question = state.getQuestion();
 		binding.quizQstView.setText(question.getQuestion());
-		binding.answerA.setText(question.getChoice(0));
-		binding.answerB.setText(question.getChoice(1));
-		binding.answerC.setText(question.getChoice(2));
-		binding.answerD.setText(question.getChoice(3));
+		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
+		for (int i = 0; i < buttons.length; i++) {
+			updateButton(buttons[i], i, question, state);
+		}
+		if (state.isAnswerSubmit()){
+			int responseIndex = state.getSelectedResponse();
+			updateOnTap(buttons[responseIndex], responseIndex, state);
+		}
+	}
+
+	/**
+	 * Updates button on view displaying
+	 */
+	private void updateButton(Button button, int index, Question question, QuizState quizState) {
+		button.setText(question.getChoice(index));
+		button.setEnabled(quizState.isButtonEnabled());
+	}
+
+	/**
+	 * Update the button on which user taps
+	 */
+	private void updateOnTap(Button button, int index, QuizState quizState) {
+		if (quizState.isAnswerSubmit()) {
+			@ColorRes final int color;
+			@StringRes final int answerText;
+			if (index == quizState.getQuestion().getAnswerIndex()) {
+				color = R.color.answer_good;
+				answerText = R.string.answer_good;
+			} else {
+				color = R.color.answer_bad;
+				answerText = R.string.answer_bad;
+			}
+			button.setBackgroundColor(getResources().getColor(color, null));
+			binding.quizPopUpView.setText(answerText);
+			// Forces announcing result for accessibility tools
+			button.announceForAccessibility(getText(answerText));
+			if (model.getCurrentQuestion().getValue().isLast()) {
+				binding.quizNextButton.setText(R.string.finish);
+			}
+			binding.quizResPanel.setVisibility(ViewGroup.VISIBLE);
+		}
 	}
 }

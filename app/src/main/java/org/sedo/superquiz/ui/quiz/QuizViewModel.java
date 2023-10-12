@@ -24,10 +24,13 @@ public class QuizViewModel extends ViewModel {
 	 * Calls on first come to the fragment to start th quiz.
 	 */
 	public void startQuiz() {
-		QuizState state = new QuizState();
-		state.setQuestions(repository.getQuestions());
-		state.setQuestionIndex(0);
-		currentQuestion.postValue(state);
+		QuizState state = currentQuestion.getValue();
+		if (state == null || state.getViewLifeState() == QuizState.VIEW_CREATED) {
+			state = state == null ? new QuizState() : state;
+			state.setQuestions(repository.getQuestions());
+			state.onQuizStart();
+			currentQuestion.postValue(state);
+		}
 	}
 
 	/**
@@ -37,11 +40,8 @@ public class QuizViewModel extends ViewModel {
 	 */
 	public boolean onResponseTap(int responseIndex) {
 		QuizState state = currentQuestion.getValue();
-		boolean check = responseIndex == state.getQuestion().getAnswerIndex();
-		if (check) {
-			state.setScore(state.getScore() + 10);
-			currentQuestion.postValue(state.clone());
-		}
+		boolean check = state.onResponseTap(responseIndex);
+		currentQuestion.postValue(state);
 		return check;
 	}
 
@@ -53,13 +53,10 @@ public class QuizViewModel extends ViewModel {
 	 */
 	public boolean nextQuestion() {
 		QuizState state = currentQuestion.getValue();
-		if (state.isLast()) {
-			// Something to do
-			return false;
-		} else {
-			state.setQuestionIndex(state.getQuestionIndex() + 1);
-			currentQuestion.postValue(state.clone());
-			return true;
+		boolean success = state.nextQuestion();
+		if (success) {
+			currentQuestion.postValue(state);
 		}
+		return success;
 	}
 }
