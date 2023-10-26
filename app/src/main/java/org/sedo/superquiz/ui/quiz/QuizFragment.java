@@ -10,6 +10,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,6 +18,7 @@ import org.sedo.superquiz.R;
 import org.sedo.superquiz.data.Question;
 import org.sedo.superquiz.databinding.FragmentQuizBinding;
 import org.sedo.superquiz.injection.ViewModelFactory;
+import org.sedo.superquiz.ui.home.WelcomeFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +61,8 @@ public class QuizFragment extends Fragment {
 		try {
 			int index = Integer.parseInt(view.getTag().toString());
 			model.onResponseTap(index);
-		}catch (Exception ignored){}
+		} catch (Exception ignored) {
+		}
 	}
 
 	@Override
@@ -71,6 +74,27 @@ public class QuizFragment extends Fragment {
 		for (Button button : buttons) {
 			button.setOnClickListener(this::onResponseTap);
 		}
+		binding.quizNextButton.setOnClickListener(v -> {
+			if (model.isLastQuestion()) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle(R.string.quiz_end_alert_title);
+				builder.setMessage(String.format(getString(R.string.quiz_end_alert_body), model.getScore()));
+
+				builder.setPositiveButton(R.string.quiz_end_positive_button, (dialog, which) -> {
+					//Catch click on positive button
+					getParentFragmentManager()
+							.beginTransaction()
+							.replace(R.id.fragment_container_view, WelcomeFragment.newInstance(null, null))
+							.commit();
+				});
+
+				AlertDialog dialog = builder.create();
+				dialog.setCancelable(false);
+				dialog.show();
+			} else {
+				model.nextQuestion();
+			}
+		});
 	}
 
 	private void loadState(QuizState state) {
@@ -80,9 +104,16 @@ public class QuizFragment extends Fragment {
 		for (int i = 0; i < buttons.length; i++) {
 			updateButton(buttons[i], i, question, state);
 		}
-		if (state.isAnswerSubmit()){
-			int responseIndex = state.getSelectedResponse();
-			updateOnTap(buttons[responseIndex], responseIndex, state);
+		switch (state.getViewLifeState()) {
+			case QuizState.WAIT_TO_CONTINUE:
+				binding.quizResPanel.setVisibility(ViewGroup.VISIBLE);
+				int responseIndex = state.getSelectedResponse();
+				updateOnTap(buttons[responseIndex], responseIndex, state);
+				break;
+			case QuizState.VIEW_CREATED:
+			case QuizState.WAITING_FOR_RESPONSE:
+			default:
+				binding.quizResPanel.setVisibility(ViewGroup.GONE);
 		}
 	}
 
@@ -92,6 +123,7 @@ public class QuizFragment extends Fragment {
 	private void updateButton(Button button, int index, Question question, QuizState quizState) {
 		button.setText(question.getChoice(index));
 		button.setEnabled(quizState.isButtonEnabled());
+		button.setBackgroundColor(getResources().getColor(R.color.button_def, null));
 	}
 
 	/**

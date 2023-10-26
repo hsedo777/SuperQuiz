@@ -35,29 +35,24 @@ public class QuizViewModel extends ViewModel {
 
 	/**
 	 * Cals when user clicks on one response button.
-	 *
-	 * @return {@code true} if and only if the response index is the good.
 	 */
-	public boolean onResponseTap(int responseIndex) {
+	public void onResponseTap(int responseIndex) {
 		QuizState state = quizState.getValue();
-		boolean check = state.onResponseTap(responseIndex);
+		state.onResponseTap(responseIndex);
 		quizState.postValue(state);
-		return check;
 	}
 
 	/**
 	 * Calls when user tap on button `Next` to request the next
 	 * question.
-	 *
-	 * @return {@code true} if and only if there is at least one new question to display.
 	 */
-	public boolean nextQuestion() {
+	public void nextQuestion() {
 		QuizState state = quizState.getValue();
+		assert state != null;
 		boolean success = state.nextQuestion();
 		if (success) {
 			quizState.postValue(state);
 		}
-		return success;
 	}
 
 	//Adds delegated methods
@@ -65,5 +60,10 @@ public class QuizViewModel extends ViewModel {
 	public boolean isLastQuestion(){
 		QuizState state = quizState.getValue();
 		return state == null || state.isLast();
+	}
+
+	public int getScore(){
+		QuizState state = quizState.getValue();
+		return state == null ? 0 : state.getScore();
 	}
 }
