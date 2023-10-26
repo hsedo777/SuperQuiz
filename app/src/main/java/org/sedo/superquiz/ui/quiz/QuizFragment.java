@@ -57,17 +57,10 @@ public class QuizFragment extends Fragment {
 	}
 
 	private void onResponseTap(View view) {
-		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
-		int i = 0;
-		QuizState quizState = model.getQuizState().getValue();
-		for (Button button : buttons) {
-			button.setEnabled(false);
-			if (button == view) {
-				model.onResponseTap(i);
-				updateOnTap(button, i, quizState);
-			}
-			i++;
-		}
+		try {
+			int index = Integer.valueOf(view.getTag().toString());
+			model.onResponseTap(index);
+		}catch (Exception e){}
 	}
 
 	@Override
