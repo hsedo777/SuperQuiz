@@ -59,7 +59,7 @@ public class QuizFragment extends Fragment {
 	private void onResponseTap(View view) {
 		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
 		int i = 0;
-		QuizState quizState = model.getCurrentQuestion().getValue();
+		QuizState quizState = model.getQuizState().getValue();
 		for (Button button : buttons) {
 			button.setEnabled(false);
 			if (button == view) {
@@ -74,7 +74,7 @@ public class QuizFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		model.startQuiz();
-		model.getCurrentQuestion().observe(getViewLifecycleOwner(), quizState -> loadState(quizState));
+		model.getQuizState().observe(getViewLifecycleOwner(), quizState -> loadState(quizState));
 		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
 		for (Button button : buttons) {
 			button.setOnClickListener(this::onResponseTap);
@@ -120,7 +120,7 @@ public class QuizFragment extends Fragment {
 			binding.quizPopUpView.setText(answerText);
 			// Forces announcing result for accessibility tools
 			button.announceForAccessibility(getText(answerText));
-			if (model.getCurrentQuestion().getValue().isLast()) {
+			if (model.getQuizState().getValue().isLast()) {
 				binding.quizNextButton.setText(R.string.finish);
 			}
 			binding.quizResPanel.setVisibility(ViewGroup.VISIBLE);

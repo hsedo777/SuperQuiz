@@ -87,7 +87,8 @@
 			android:id="@+id/quiz_next_button"
 			android:text="@string/next"
 			app:layout_constraintHorizontal_weight="1"
-			app:layout_constraintEnd_toEndOf="@id/quiz_res_panel"/>
+			app:layout_constraintEnd_toEndOf="@id/quiz_res_panel"
+			app:layout_constraintBottom_toBottomOf="@id/quiz_res_panel"/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

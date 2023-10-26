@@ -7,7 +7,7 @@ import org.sedo.superquiz.data.QuestionRepository;
 
 public class QuizViewModel extends ViewModel {
 	private final QuestionRepository repository;
-	private final MutableLiveData<QuizState> currentQuestion = new MutableLiveData<>();
+	private final MutableLiveData<QuizState> quizState = new MutableLiveData<>();
 
 	public QuizViewModel(QuestionRepository repository) {
 		this.repository = repository;
@@ -16,20 +16,20 @@ public class QuizViewModel extends ViewModel {
 	/**
 	 * Gets the {@code LiveData} of the current question.
 	 * */
-	public MutableLiveData<QuizState> getCurrentQuestion(){
-		return currentQuestion;
+	public MutableLiveData<QuizState> getQuizState(){
+		return quizState;
 	}
 
 	/**
 	 * Calls on first come to the fragment to start th quiz.
 	 */
 	public void startQuiz() {
-		QuizState state = currentQuestion.getValue();
+		QuizState state = quizState.getValue();
 		if (state == null || state.getViewLifeState() == QuizState.VIEW_CREATED) {
 			state = state == null ? new QuizState() : state;
 			state.setQuestions(repository.getQuestions());
 			state.onQuizStart();
-			currentQuestion.postValue(state);
+			quizState.postValue(state);
 		}
 	}
 
@@ -39,9 +39,9 @@ public class QuizViewModel extends ViewModel {
 	 * @return {@code true} if and only if the response index is the good.
 	 */
 	public boolean onResponseTap(int responseIndex) {
-		QuizState state = currentQuestion.getValue();
+		QuizState state = quizState.getValue();
 		boolean check = state.onResponseTap(responseIndex);
-		currentQuestion.postValue(state);
+		quizState.postValue(state);
 		return check;
 	}
 
@@ -52,10 +52,10 @@ public class QuizViewModel extends ViewModel {
 	 * @return {@code true} if and only if there is at least one new question to display.
 	 */
 	public boolean nextQuestion() {
-		QuizState state = currentQuestion.getValue();
+		QuizState state = quizState.getValue();
 		boolean success = state.nextQuestion();
 		if (success) {
-			currentQuestion.postValue(state);
+			quizState.postValue(state);
 		}
 		return success;
 	}
