@@ -68,7 +68,7 @@ public class QuizState {
 	/**
 	 * Processes user answer submitting.
 	 */
-	boolean onResponseTap(int responseIndex) {
+	void onResponseTap(int responseIndex) {
 		boolean check = responseIndex == getQuestion().getAnswerIndex();
 		if (check) {
 			score = score + 10;
@@ -76,7 +76,6 @@ public class QuizState {
 		selectedResponse = responseIndex;
 		buttonEnabled = false;
 		viewLifeState = WAIT_TO_CONTINUE;
-		return check;
 	}
 
 	/**

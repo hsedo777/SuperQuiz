@@ -9,5 +9,8 @@
 	<string name="finish">Finish</string>
 	<string name="answer_good">Good answer !</string>
 	<string name="answer_bad">Bad answer, sorry</string>
+	<string name="quiz_end_alert_title">You have finished! - %1$s</string>
+	<string name="quiz_end_alert_body">Your score is %1$d!</string>
+	<string name="quiz_end_positive_button">Quit</string>
 
 </resources>
