@@ -27,8 +27,10 @@ import org.sedo.superquiz.ui.home.WelcomeFragment;
  */
 public class QuizFragment extends Fragment {
 
+	final private static String PLAYER_NAME = "PLAYER_NAME";
 	private FragmentQuizBinding binding;
 	private QuizViewModel model;
+	private String playerName;
 
 	public QuizFragment() {
 	}
@@ -36,16 +38,23 @@ public class QuizFragment extends Fragment {
 	/**
 	 * Use this factory method to create a new instance of
 	 * this fragment.
-	 *
+	 * @param playerName the name of the player
 	 * @return A new instance of fragment QuizFragment.
 	 */
-	public static QuizFragment newInstance() {
-		return new QuizFragment();
+	public static QuizFragment newInstance(String playerName) {
+		QuizFragment quizFragment = new QuizFragment();
+		Bundle bundle = new Bundle();
+		bundle.putString(PLAYER_NAME, playerName);
+		quizFragment.setArguments(bundle);
+		return quizFragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (getArguments() != null){
+			playerName = getArguments().getString(PLAYER_NAME);
+		}
 		model = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(QuizViewModel.class);
 	}
 
@@ -76,15 +85,15 @@ public class QuizFragment extends Fragment {
 		}
 		binding.quizNextButton.setOnClickListener(v -> {
 			if (model.isLastQuestion()) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setTitle(R.string.quiz_end_alert_title);
+				AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+				builder.setTitle(String.format(getString(R.string.quiz_end_alert_title), playerName));
 				builder.setMessage(String.format(getString(R.string.quiz_end_alert_body), model.getScore()));
 
 				builder.setPositiveButton(R.string.quiz_end_positive_button, (dialog, which) -> {
 					//Catch click on positive button
 					getParentFragmentManager()
 							.beginTransaction()
-							.replace(R.id.fragment_container_view, WelcomeFragment.newInstance(null, null))
+							.replace(R.id.fragment_container_view, WelcomeFragment.newInstance(playerName))
 							.commit();
 				});
 
