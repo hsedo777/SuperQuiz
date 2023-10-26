@@ -59,4 +59,11 @@ public class QuizViewModel extends ViewModel {
 		}
 		return success;
 	}
+
+	//Adds delegated methods
+	/***/
+	public boolean isLastQuestion(){
+		QuizState state = quizState.getValue();
+		return state == null || state.isLast();
+	}
 }

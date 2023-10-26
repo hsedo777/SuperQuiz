@@ -38,8 +38,7 @@ public class QuizFragment extends Fragment {
 	 * @return A new instance of fragment QuizFragment.
 	 */
 	public static QuizFragment newInstance() {
-		QuizFragment fragment = new QuizFragment();
-		return fragment;
+		return new QuizFragment();
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class QuizFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		binding = FragmentQuizBinding.inflate(inflater, container, false);
@@ -58,16 +57,16 @@ public class QuizFragment extends Fragment {
 
 	private void onResponseTap(View view) {
 		try {
-			int index = Integer.valueOf(view.getTag().toString());
+			int index = Integer.parseInt(view.getTag().toString());
 			model.onResponseTap(index);
-		}catch (Exception e){}
+		}catch (Exception ignored){}
 	}
 
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		model.startQuiz();
-		model.getQuizState().observe(getViewLifecycleOwner(), quizState -> loadState(quizState));
+		model.getQuizState().observe(getViewLifecycleOwner(), this::loadState);
 		Button[] buttons = new Button[]{binding.answerA, binding.answerB, binding.answerC, binding.answerD};
 		for (Button button : buttons) {
 			button.setOnClickListener(this::onResponseTap);
@@ -113,7 +112,7 @@ public class QuizFragment extends Fragment {
 			binding.quizPopUpView.setText(answerText);
 			// Forces announcing result for accessibility tools
 			button.announceForAccessibility(getText(answerText));
-			if (model.getQuizState().getValue().isLast()) {
+			if (model.isLastQuestion()) {
 				binding.quizNextButton.setText(R.string.finish);
 			}
 			binding.quizResPanel.setVisibility(ViewGroup.VISIBLE);
